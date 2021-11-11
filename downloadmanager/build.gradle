@@ -50,7 +50,6 @@ dependencies {
     implementation "androidx.work:work-runtime:$work_version"
     def okhttp3_version = "4.9.1"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
 }
 
 
@@ -65,7 +64,7 @@ afterEvaluate {
                 from components.release
 
                 // You can then customize attributes of the publication as shown below.
-                groupId = 'com.yxf'
+                groupId = 'com.github.dqh147258'
                 artifactId = 'DownloadManager'
                 version = '1.0.0'
             }
