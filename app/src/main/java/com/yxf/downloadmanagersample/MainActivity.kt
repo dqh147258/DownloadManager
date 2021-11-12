@@ -18,8 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private val vb by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
-    private val url =
-        "https://books-1255703580.cos.ap-shanghai.myqcloud.com/OpenGL%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E7%AC%AC%E4%B9%9D%E7%89%88%E8%8B%B1%E6%96%87%EF%BC%89.pdf"
+    private val url = "https://download.sanguosha.cn/sgswx/sgs3991.apk"
 
     private lateinit var task: DownloadTask
 
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateNewTask(): DownloadTask {
-        task = DownloadTask(url, url, AndroidFileFactory.createDownloadFile("Lawyer/download2.pdf"))
+        task = DownloadTask(url, url, AndroidFileFactory.createDownloadFile("sgswx/sgs3991.apk"))
         return task
     }
 }
