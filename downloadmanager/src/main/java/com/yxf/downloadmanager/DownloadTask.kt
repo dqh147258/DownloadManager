@@ -3,6 +3,7 @@ package com.yxf.downloadmanager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.yxf.downloadmanager.file.AndroidFile
+import com.yxf.safelivedata.SafedLiveData
 
 open class DownloadTask(val id: String, val url: String, val file: AndroidFile) {
 
@@ -18,7 +19,7 @@ open class DownloadTask(val id: String, val url: String, val file: AndroidFile) 
     /**
      * 数据变化事件
      */
-    val dataChangedEventData = MutableLiveData<Int>().apply { postValue(0) }
+    val dataChangedEventData = SafedLiveData<Int>().apply { postValue(0) }
 
     @Volatile
     private var shouldPostEvent = EVENT_NONE
@@ -127,6 +128,18 @@ open class DownloadTask(val id: String, val url: String, val file: AndroidFile) 
                 handler.post(sendEventTask)
             }
         }
+    }
+
+    protected fun finalize() {
+        log.d("task(id = $id) finalize")
+        if (dataChangedEventData.hasObservers()) {
+            removeLiveDataObserver()
+        }
+    }
+
+    private fun removeLiveDataObserver() {
+        //TODO : LiveData可能会引发其本身的内存泄漏
+        dataChangedEventData.removeObserver()
     }
 
     fun containEvent(event: Int): Boolean {
