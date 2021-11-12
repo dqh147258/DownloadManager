@@ -7,14 +7,13 @@ import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.internal.http2.StreamResetException
 import java.io.IOException
 import java.net.ProtocolException
 import java.net.SocketException
 import java.util.concurrent.ConcurrentHashMap
 
 internal class DownloadWorker(private val appContext: Context, workParams: WorkerParameters) : Worker(appContext, workParams) {
-
-    private val TAG = "DownloadManager.DownloadWorker"
 
     companion object {
 
@@ -134,25 +133,22 @@ internal class DownloadWorker(private val appContext: Context, workParams: Worke
                 }
             }
         } catch (e: Exception) {
-            when (e) {
-                is SocketException, is ProtocolException -> {
-                    return if (pauseSet.contains(task.state)) {
-                        log.v("task(id = ${task.id}) state is ${task.state}")
-                        Result.success()
-                    } else {
+            return if (pauseSet.contains(task.state)) {
+                log.v("task(id = ${task.id}) state is ${task.state}")
+                Result.success()
+            } else {
+                task.errorMessage = "download task execute failed caused by ${e.message}"
+                task.state = DownloadState.Error
+                DownloadManager.saveTask(task)
+                when (e) {
+                    is SocketException, is ProtocolException, is StreamResetException -> {
                         e.printStackTrace()
-                        task.errorMessage = "download task execute failed caused by ${e.message}"
-                        task.state = DownloadState.Error
-                        DownloadManager.saveTask(task)
-                        Result.failure()
+                    }
+                    else -> {
+                        throw e
                     }
                 }
-                else -> {
-                    task.errorMessage = "download task execute failed caused by ${e.message}"
-                    task.state = DownloadState.Error
-                    DownloadManager.saveTask(task)
-                    throw e
-                }
+                Result.failure()
             }
         } finally {
             callMap.remove(task.id)

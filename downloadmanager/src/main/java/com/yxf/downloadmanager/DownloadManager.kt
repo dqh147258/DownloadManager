@@ -6,6 +6,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.yxf.downloadmanager.file.AndroidFile
+import com.yxf.safelivedata.SafeLiveData
+import com.yxf.safelivedata.setValueSync
 import java.util.concurrent.ConcurrentHashMap
 
 object DownloadManager {
@@ -33,8 +35,8 @@ object DownloadManager {
     @Volatile
     internal var initialized = false
 
-    val executingTaskListData = MutableLiveData<MutableMap<String, DownloadTask>>().apply { value = ConcurrentHashMap() }
-    val waitingTaskListData = MutableLiveData<MutableMap<String, DownloadTask>>().apply { value = ConcurrentHashMap() }
+    val executingTaskListData = SafeLiveData<MutableMap<String, DownloadTask>>().apply { value = ConcurrentHashMap() }
+    val waitingTaskListData = SafeLiveData<MutableMap<String, DownloadTask>>().apply { value = ConcurrentHashMap() }
 
     /**
      * 初始化,必调,并且应该尽早

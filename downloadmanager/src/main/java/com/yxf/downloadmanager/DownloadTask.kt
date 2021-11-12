@@ -1,7 +1,9 @@
 package com.yxf.downloadmanager
 
+import androidx.lifecycle.MutableLiveData
 import com.yxf.downloadmanager.file.AndroidFile
 import com.yxf.safelivedata.SafeLiveData
+import com.yxf.safelivedata.setValueSync
 
 open class DownloadTask(val id: String, val url: String, val file: AndroidFile) {
 
@@ -17,7 +19,7 @@ open class DownloadTask(val id: String, val url: String, val file: AndroidFile) 
     /**
      * 数据变化事件
      */
-    val dataChangedEventData = SafeLiveData<Int>().apply { postValue(0) }
+    val dataChangedEventData: MutableLiveData<Int> = SafeLiveData<Int>().apply { setValueSync(0) }
 
     @Volatile
     private var shouldPostEvent = EVENT_NONE

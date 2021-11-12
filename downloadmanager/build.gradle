@@ -45,7 +45,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.github.dqh147258:SafeLiveData:1.0.3'
+    implementation 'com.github.dqh147258:SafeLiveData:1.1.0'
 
     //如果需要适配Android 12需要将版本改成2.7.0
     def work_version = "2.6.0"
