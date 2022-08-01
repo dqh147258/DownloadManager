@@ -41,6 +41,11 @@ object DownloadManager {
     /**
      * 初始化,必调,并且应该尽早
      */
+
+    fun init(applicationContext: Context) {
+        init(applicationContext, SharePreferenceStorage(applicationContext))
+    }
+
     fun init(applicationContext: Context, storage: DownloadTaskStorage = SharePreferenceStorage(applicationContext)) {
         if (initialized) {
             log.w("download manager has been initialized already")
