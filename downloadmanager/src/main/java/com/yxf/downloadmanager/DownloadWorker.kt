@@ -91,7 +91,7 @@ internal class DownloadWorker(private val appContext: Context, workParams: Worke
         val pauseSet by lazy { setOf(DownloadState.Pause, DownloadState.Cancel) }
         try {
             val response = call.execute()
-            val ins = response.body!!.byteStream()
+            val ins = response.body()!!.byteStream()
             val os = file.getOutputStream()
             os.use {
                 ins.use {
@@ -169,7 +169,7 @@ internal class DownloadWorker(private val appContext: Context, workParams: Worke
         try {
             val response: Response = client.newCall(request).execute()
             if (response != null && response.isSuccessful) {
-                val contentLength: Long = response.body?.contentLength() ?: 0
+                val contentLength: Long = response.body()?.contentLength() ?: 0
                 response.close()
                 return contentLength
             }
